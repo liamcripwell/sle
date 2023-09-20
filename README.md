@@ -1,1 +1,1 @@
-# sle
+# Simplicity Level Estimate (SLE) Metric
