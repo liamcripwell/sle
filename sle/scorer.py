@@ -17,7 +17,6 @@ class SLEScorer():
         for batch in tqdm(test_data):
             batch = { k: xi.to(self.device, non_blocking=True) for k, xi in batch.items() }
             output = self.model(**batch, return_dict=True)
-            print(output)
             rls += [l.item() for l in output["logits"]]
 
         return rls
