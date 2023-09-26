@@ -72,23 +72,11 @@ class RobertaFinetuner(pl.LightningModule):
         loss = torch.stack([x["loss"] for x in outputs]).mean()
         self.log(f"{prefix}_loss", loss)
 
-        flat_preds = [y.item() for ys in outputs for y in ys["preds"]]
-        flat_labels = [y.item() for ys in outputs for y in ys["labels"]]
-
-        # log entropies
-        density, _ = np.histogram(flat_preds, density=True, bins=20)
-        self.log(f"{prefix}_entropy", entropy(density, base=2))
-        class_preds = [[] for _ in range(5)] # assuming 5 classes (0-4)
-        for i in range(len(flat_preds)):
-            class_preds[int(flat_labels[i])].append(flat_preds[i])
-        ents = []
-        for l in range(self.model.num_labels):
-            density, _ = np.histogram(class_preds[l], density=True, bins=20)
-            ents += [entropy(density, base=2)]
-        self.log(f"{prefix}_macro_entropy", np.mean(ents))
-
         # compute document-level MAE when doing regression
         if self.has_param("log_doc_mae"):
+            flat_preds = [y.item() for ys in outputs for y in ys["preds"]]
+            flat_labels = [y.item() for ys in outputs for y in ys["labels"]]
+
             doc_ids = [y for ys in outputs for y in ys["doc_ids"]]
             doc_preds = {}
             doc_labs = {}
@@ -104,45 +92,6 @@ class RobertaFinetuner(pl.LightningModule):
             for k, v in doc_preds.items():
                 doc_means.append(np.mean(v))
                 doc_gts.append(np.mean(doc_labs[k]))
-            self.log(f"{prefix}_doc_mae", mean_absolute_error(doc_gts, doc_means))
-
-        return {f"{prefix}_loss": loss}
-    
-    def validation_epoch_end(self, outputs, prefix="val"):
-        loss = torch.stack([x["loss"] for x in outputs]).mean()
-        self.log(f"{prefix}_loss", loss)
-        
-        flat_preds = [y.item() for ys in outputs for y in ys["preds"]]
-        flat_labels = [y.item() for ys in outputs for y in ys["labels"]]
-
-        # log entropies
-        density, _ = np.histogram(flat_preds, density=True, bins=20)
-        self.log(f"{prefix}_entropy", entropy(density, base=2))
-        class_preds = [[] for _ in range(5)] # assuming 5 classes (0-4)
-        for i in range(len(flat_preds)):
-            class_preds[int(flat_labels[i])].append(flat_preds[i])
-        ents = []
-        for l in range(self.model.num_labels):
-            density, _ = np.histogram(class_preds[l], density=True, bins=20)
-            ents += [entropy(density, base=2)]
-        self.log(f"{prefix}_macro_entropy", np.mean(ents))
-
-        # compute document-level MAE when doing regression
-        if self.has_param("log_doc_mae"):
-            doc_ids = [y for ys in outputs for y in ys["doc_ids"]]
-            doc_preds = {}
-            doc_labs = {}
-            for i in range(len(doc_ids)):
-                if doc_ids[i] not in doc_preds:
-                    doc_preds[doc_ids[i]] = [flat_preds[i]]
-                    doc_labs[doc_ids[i]] = flat_labels[i]
-                else:
-                    doc_preds[doc_ids[i]].append(flat_preds[i])
-            doc_means = []
-            doc_gts = []
-            for k, v in doc_preds.items():
-                doc_means.append(np.mean(v))
-                doc_gts.append(doc_labs[k])
             self.log(f"{prefix}_doc_mae", mean_absolute_error(doc_gts, doc_means))
 
         return {f"{prefix}_loss": loss}

@@ -38,6 +38,10 @@ class SLEDataModule(pl.LightningDataModule):
             self.train = list(zip(train_seqs, list(self.train["doc_id"]), list(self.train[self.hparams.y_col])))
             self.valid = list(zip(valid_seqs, list(self.valid["doc_id"]), list(self.valid[self.hparams.y_col])))
             self.test = list(zip(test_seqs, list(self.test["doc_id"]), list(self.test[self.hparams.y_col])))
+        else:
+            self.train = list(zip(train_seqs, list(self.train[self.hparams.y_col])))
+            self.valid = list(zip(valid_seqs, list(self.valid[self.hparams.y_col])))
+            self.test = list(zip(test_seqs, list(self.test[self.hparams.y_col])))
 
     def train_dataloader(self):
         return DataLoader(self.train, batch_size=self.hparams.batch_size, shuffle=True, 
