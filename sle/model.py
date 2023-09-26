@@ -95,14 +95,15 @@ class RobertaFinetuner(pl.LightningModule):
             for i in range(len(doc_ids)):
                 if doc_ids[i] not in doc_preds:
                     doc_preds[doc_ids[i]] = [flat_preds[i]]
-                    doc_labs[doc_ids[i]] = flat_labels[i]
+                    doc_labs[doc_ids[i]] = [flat_labels[i]]
                 else:
                     doc_preds[doc_ids[i]].append(flat_preds[i])
+                    doc_labs[doc_ids[i]].append(flat_labels[i])
             doc_means = []
             doc_gts = []
             for k, v in doc_preds.items():
                 doc_means.append(np.mean(v))
-                doc_gts.append(doc_labs[k])
+                doc_gts.append(np.mean(doc_labs[k]))
             self.log(f"{prefix}_doc_mae", mean_absolute_error(doc_gts, doc_means))
 
         return {f"{prefix}_loss": loss}

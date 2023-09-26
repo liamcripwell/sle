@@ -71,6 +71,13 @@ class SLEDataModule(pl.LightningDataModule):
 
         return data
 
+    def transfer_batch_to_device(self, batch, device, dataloader_idx):
+        if self.has_param("log_doc_mae"): # only send tensors to device
+            batch = {k: v.to(device=device) if isinstance(v, torch.Tensor) else v for k, v in batch.items()}
+        else:
+            batch = super().transfer_batch_to_device(batch, device, dataloader_idx)
+        return batch
+
     def has_param(self, param):
         """Check if param exists and has a non-negative/null value."""
         if param in self.hparams:
