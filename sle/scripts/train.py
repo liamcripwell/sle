@@ -29,23 +29,27 @@ if __name__ == '__main__':
 
     dm = SLEDataModule(model.tokenizer, params=args)
 
-    if args.name is None:
-        # use default logger settings (for hparam sweeps)
-        wandb_logger = WandbLogger()
-        checkpoint_callback=None
+    if args.no_log:
+        logger = False
     else:
-        # prepare logger
-        wandb_logger = WandbLogger(
-            name=args.name, project=args.project, save_dir=args.save_dir, id=args.wandb_id)
+        if args.name is None:
+            # use default logger settings (for hparam sweeps)
+            wandb_logger = WandbLogger()
+            checkpoint_callback=None
+        else:
+            # prepare logger
+            wandb_logger = WandbLogger(
+                name=args.name, project=args.project, save_dir=args.save_dir, id=args.wandb_id)
 
-        # checkpoint callback
-        mode = "max" if args.ckpt_metric.split("_")[-1] == "f1" else "min"
-        checkpoint_callback = [ModelCheckpoint(monitor=args.ckpt_metric, mode=mode, save_last=True)]
+            # checkpoint callback
+            mode = "max" if args.ckpt_metric.split("_")[-1] == "f1" else "min"
+            checkpoint_callback = [ModelCheckpoint(monitor=args.ckpt_metric, mode=mode, save_last=True)]
+        logger = wandb_logger
 
     trainer = pl.Trainer.from_argparse_args(
         args,
         val_check_interval=args.val_check_interval,
-        logger=wandb_logger,
+        logger=logger,
         accelerator="gpu",
         strategy="ddp",
         #plugins=DDPStrategy(find_unused_parameters=True),

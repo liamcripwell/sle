@@ -223,5 +223,6 @@ class RobertaFinetuner(pl.LightningModule):
         parser.add_argument("--hidden_dropout_prob", type=float, default=None, required=False,)
 
         parser.add_argument("--log_doc_mae", action="store_true")
+        parser.add_argument("--no_log", action="store_true")
 
         return parser
