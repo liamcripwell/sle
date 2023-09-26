@@ -23,11 +23,9 @@ if __name__ == '__main__':
 
     # prepare data module and finetuner class
     if args.checkpoint is None:
-        model = RobertaFinetuner(add_context=args.add_context, params=args)
+        model = RobertaFinetuner(params=args)
     else:
-        model = RobertaFinetuner.load_from_checkpoint(
-                    args.checkpoint, add_context=args.add_context, params=args,
-                    strict=False)
+        model = RobertaFinetuner.load_from_checkpoint(args.checkpoint, params=args, strict=False)
 
     dm = SLEDataModule(model.tokenizer, params=args)
 
