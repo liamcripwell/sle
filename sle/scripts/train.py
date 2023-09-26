@@ -29,13 +29,13 @@ if __name__ == '__main__':
 
     dm = SLEDataModule(model.tokenizer, params=args)
 
+    checkpoint_callback = None
     if args.no_log:
         logger = False
     else:
         if args.name is None:
             # use default logger settings (for hparam sweeps)
             wandb_logger = WandbLogger()
-            checkpoint_callback=None
         else:
             # prepare logger
             wandb_logger = WandbLogger(
