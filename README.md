@@ -50,6 +50,7 @@ python sle/scripts/train.py
   --val_check_interval=0.25
   --ckpt_metric=val_loss
   --no_log
+  --save_dir=my_ckpts_path/
 ```
 
 After training a metric model, use `.save_model()` to save in pytorch format to be loaded by the `SLEScorer`.
