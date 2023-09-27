@@ -49,6 +49,7 @@ python sle/scripts/train.py
   --learning_rate=1e-5
   --val_check_interval=0.25
   --ckpt_metric=val_loss
+  --no_log
 ```
 
 After training a metric model, use `.save_model()` to save in pytorch format to be loaded by the `SLEScorer`.
