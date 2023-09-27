@@ -5,6 +5,9 @@ pip install -e .
 ```
 
 ## Usage
+SLE scores can be calculated within python as shown in the example below.
+
+For a raw estimation of a sentence's simplicity, use `'sle'`, but to evaluate sentence simplification systems we recommend providing the input sentences and using `'sle_delta'` ($\Delta \text{SLE}$). See the paper for further details.
 
 ```python
 from sle.scorer import SLEScorer
@@ -16,8 +19,13 @@ texts = [
   "Here is an additional sentence that makes use of more complex terminology."
 ]
 
+# raw simplicity estimates
 results = scorer.score(texts)
-print(results) # [3.9842946529388428, 0.5840105414390564]
+print(results) # {'sle': [3.9842946529388428, 0.5840105414390564]}
+
+# delta from input sentences
+results = scorer.score([texts[0]], inputs=[texts[1]])
+print(results) # {'sle': [3.9842941761016846], 'sle_delta': [3.4002838730812073]}
 ```
 
 ## Training Metric
