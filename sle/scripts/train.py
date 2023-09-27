@@ -32,6 +32,7 @@ if __name__ == '__main__':
     checkpoint_callback = None
     if args.no_log:
         logger = False
+        checkpoint_callback = ModelCheckpoint(dirpath=args.save_dir)
     else:
         if args.name is None:
             # use default logger settings (for hparam sweeps)

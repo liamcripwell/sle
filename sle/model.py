@@ -8,9 +8,6 @@ from sklearn.metrics import mean_absolute_error
 from transformers import AdamW, RobertaTokenizer, RobertaForSequenceClassification
 
 
-# TODO: Inference function
-
-
 class RobertaFinetuner(pl.LightningModule):
 
     def __init__(self, model_name_or_path='roberta-base', tokenizer=None, params=None):
@@ -134,9 +131,6 @@ class RobertaFinetuner(pl.LightningModule):
         return False
 
     def save_model(self, path):
-        # add inference parameters to model config
-        self.model.config.update({p: self.hparams[p] for p in INF_PARAMS})
-
         self.model.save_pretrained(path)
         self.tokenizer.save_pretrained(path)
         print(f"{type(self.model)} model saved to {path}.")
