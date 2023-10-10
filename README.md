@@ -29,7 +29,7 @@ print(results) # {'sle': [3.9842941761016846], 'sle_delta': [3.4002838730812073]
 ```
 
 ## Training Metric
-We primarily use [wandb](https://wandb.ai/site) for logging.
+Our training procedure makes use of [PyTorch Lightning](https://lightning.ai/pytorch-lightning) and we primarily use [wandb](https://wandb.ai/site) for logging.
 
 ```bash
 python sle/scripts/train.py
