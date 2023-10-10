@@ -28,6 +28,17 @@ results = scorer.score([texts[0]], inputs=[texts[1]])
 print(results) # {'sle': [3.9842941761016846], 'sle_delta': [3.4002838730812073]}
 ```
 
+## Label Softening
+You can use the label softening feature described in our paper on your own data.
+
+```python
+import pandas as pd
+from sle.utils import smooth_labels
+
+df = pd.read_csv("some_data.csv") # data with a quantized label column
+df_soft = smooth_labels(df, label_col="label", num_labels=5) # assuming 5 original label values
+```
+
 ## Training Metric
 Our training procedure makes use of [PyTorch Lightning](https://lightning.ai/pytorch-lightning) and we primarily use [wandb](https://wandb.ai/site) for logging.
 
