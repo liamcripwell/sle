@@ -9,10 +9,12 @@ SLE scores can be calculated within python as shown in the example below.
 
 For a raw estimation of a sentence's simplicity, use `'sle'`, but to evaluate sentence simplification systems we recommend providing the input sentences and using `'sle_delta'` ($\Delta \text{SLE}$). See the paper for further details.
 
+A pretrained version of the model described in the paper is available on [HuggingFace](https://huggingface.co/liamcripwell/sle-base).
+
 ```python
 from sle.scorer import SLEScorer
 
-scorer = SLEScorer("path_to_model/")
+scorer = SLEScorer("liamcripwell/sle-base")
 
 texts = [
   "Here is a simple sentence.",
