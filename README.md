@@ -1,5 +1,7 @@
 # Simplicity Level Estimate (SLE) Metric
 
+This repo contains code for the SLE metric as described in the [2023 EMNLP paper](https://aclanthology.org/2023.emnlp-main.739/).
+
 ```bash
 pip install -e .
 ```
@@ -80,4 +82,28 @@ from sle.model import RobertaFinetuner
 
 model = RobertaFinetuner.load_from_checkpoint("checkpoints/last.ckpt", strict=False)
 model.save_model("my_sle_model")
+```
+
+## Citation
+If you make use of SLE in your project, please cite our paper:
+
+```bibtex
+@inproceedings{cripwell-etal-2023-simplicity,
+    title = "Simplicity Level Estimate ({SLE}): A Learned Reference-Less Metric for Sentence Simplification",
+    author = {Cripwell, Liam  and
+      Legrand, Jo{\"e}l  and
+      Gardent, Claire},
+    editor = "Bouamor, Houda  and
+      Pino, Juan  and
+      Bali, Kalika",
+    booktitle = "Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing",
+    month = dec,
+    year = "2023",
+    address = "Singapore",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2023.emnlp-main.739",
+    doi = "10.18653/v1/2023.emnlp-main.739",
+    pages = "12053--12059",
+    abstract = "Automatic evaluation for sentence simplification remains a challenging problem. Most popular evaluation metrics require multiple high-quality references {--} something not readily available for simplification {--} which makes it difficult to test performance on unseen domains. Furthermore, most existing metrics conflate simplicity with correlated attributes such as fluency or meaning preservation. We propose a new learned evaluation metric {---} SLE {---} which focuses on simplicity, outperforming almost all existing metrics in terms of correlation with human judgements.",
+}
 ```
