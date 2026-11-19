@@ -6,6 +6,12 @@ This repo contains code for the SLE metric as described in the [2023 EMNLP paper
 pip install -e .
 ```
 
+To install SLE directly from GitHub using uv, run:
+
+```
+uv add git+https://github.com/liamcripwell/sle.git
+```
+
 ## Usage
 SLE scores can be calculated within python as shown in the example below.
 
