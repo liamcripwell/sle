@@ -1,11 +1,13 @@
 from tqdm import tqdm
+from torch.cuda import is_available as cuda_is_available
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
+device ="cuda" if cuda_is_available() else "cpu"
 
 class SLEScorer():
 
-    def __init__(self, model_path, device="cuda"):
+    def __init__(self, model_path, device=device):
         self.device = device
         self.model = AutoModelForSequenceClassification.from_pretrained(model_path, num_labels=1).to(device).eval()
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
